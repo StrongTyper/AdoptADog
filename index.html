@@ -1,14 +1,13 @@
 
 <html>
 <head>
-  <title>What does your Dog's breed mean?</title>
+  <title>Find a Dog In Need</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   <style>
     body {
        margin-top: 100px;
        margin-left: 100px;
-       text-align: center;
     }
   </style>
 </head>
@@ -22,7 +21,9 @@
     <br>
     <img id="dogimg" src="http://njspca.org/wp-content/uploads/2014/09/NJSPCA_ADOPT-A-PET.png" alt="" />
     <br>
-    <h3>Other meanings</h3>
+    <h3>Enter Zipcode for Local Shelter</h3>
+    <input type="text" id="selection2">
+    <button id="search2">Search</button>
     <p id = "wikitxt">
     </p>
   </form>
@@ -31,16 +32,20 @@
      e.preventDefault();
      var breed = $('#selection').val();
      $.getJSON( 'https://dog.ceo/api/breed/' + breed + '/images/random', function(data,status) {
-        console.log(status);
-        var jsonString = JSON.stringify(data);
-        console.log(jsonString);
         $("#dogimg").attr("src",data.message);
-     });
-     $.getJSON('https://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&format=json&formatversion=2&titles=' + breed +'&callback=?', function(data,status) {
+      });
+      });
+      $('#search2').click(function(e) {
+        e.preventDefault();
+        var zipcode = $('#selection2').val();
+     $.getJSON('http://api.petfinder.com/shelter.find?key=223775a6f6cfd294e8da55e0ce27f9d5&location=' + zipcode + '&count=1&format=json&callback=?', function(data,status) {
        console.log(status);
-       $("#wikitxt").text(data.query.pages[0].revisions[0].content);
+       console.log(data.petfinder.shelters.shelter.name);
+       var jsonstring = JSON.stringify(data.petfinder.shelters.shelter.name);
+       console.log(jsonstring);
+       $("#wikitxt").text("Name: "+data.petfinder.shelters.shelter.name.$t + " Location: " + data.petfinder.shelters.shelter.city.$t + ", " + data.petfinder.shelters.shelter.state.$t + " " + data.petfinder.shelters.shelter.zip.$t + " Phone: " + data.petfinder.shelters.shelter.phone.$t + " Email: " + data.petfinder.shelters.shelter.email.$t);
     });
-  });
+    });
   </script>
 </body>
 
