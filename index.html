@@ -1,0 +1,46 @@
+
+<html>
+<head>
+  <title>What does your Dog's breed mean?</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <style>
+    body {
+       margin-top: 100px;
+       margin-left: 100px;
+    }
+  </style>
+</head>
+
+<body>
+  <h3>Enter Breed Type</h3>
+    <form>
+    <input type="text" id="selection">
+    <button id="search">Search</button>
+    <br>
+    <br>
+    <img id="dogimg" src="http://njspca.org/wp-content/uploads/2014/09/NJSPCA_ADOPT-A-PET.png" alt="" />
+    <br>
+    <h3>Other meanings</h3>
+    <p id = "wikitxt">
+    </p>
+  </form>
+  <script>
+     $('#search').click(function(e) {
+     e.preventDefault();
+     var breed = $('#selection').val();
+     $.getJSON( 'https://dog.ceo/api/breed/' + breed + '/images/random', function(data,status) {
+        console.log(status);
+        var jsonString = JSON.stringify(data);
+        console.log(jsonString);
+        $("#dogimg").attr("src",data.message);
+     });
+     $.getJSON('https://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&format=json&formatversion=2&titles=' + breed +'&callback=?', function(data,status) {
+       console.log(status);
+       $("#wikitxt").text(data.query.pages[0].revisions[0].content);
+    });
+  });
+  </script>
+</body>
+
+</html>
