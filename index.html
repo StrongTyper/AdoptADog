@@ -38,7 +38,7 @@
       $('#search2').click(function(e) {
         e.preventDefault();
         var zipcode = $('#selection2').val();
-     $.getJSON('http://api.petfinder.com/shelter.find?key=223775a6f6cfd294e8da55e0ce27f9d5&location=' + zipcode + '&count=1&format=json&callback=?', function(data,status) {
+     $.getJSON('https://api.petfinder.com/shelter.find?key=223775a6f6cfd294e8da55e0ce27f9d5&location=' + zipcode + '&count=1&format=json&callback=?', function(data,status) {
        console.log(status);
        console.log(data.petfinder.shelters.shelter.name);
        var jsonstring = JSON.stringify(data.petfinder.shelters.shelter.name);
